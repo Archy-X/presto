@@ -17,7 +17,7 @@ services:
     hostname: presto-worker-1
     extends:
       file: ../common/standard.yml
-      service: java-8-base
+      service: java-base
     command: /docker/volumes/conf/docker/files/presto-launcher-wrapper.sh multinode-tls-worker run
     networks:
       default:
@@ -33,7 +33,7 @@ services:
     hostname: presto-worker-2
     extends:
       file: ../common/standard.yml
-      service: java-8-base
+      service: java-base
     command: /docker/volumes/conf/docker/files/presto-launcher-wrapper.sh multinode-tls-worker run
     networks:
       default:

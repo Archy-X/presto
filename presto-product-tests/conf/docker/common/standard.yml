@@ -1,16 +1,15 @@
-version: '2'
 services:
 
-  java-8-base:
-    image: 'prestodb/centos6-oj8:${DOCKER_IMAGES_VERSION}'
+  java-base:
+    image: 'localhost:5000/centos-openjdk:latest'
     volumes:
       - ../..:/docker/volumes/conf
       - ../../target:/docker/volumes/logs
 
   hadoop-master:
     extends:
-      service: java-8-base
-    image: '${HADOOP_BASE_IMAGE}:${DOCKER_IMAGES_VERSION}'
+      service: java-base
+    image: 'localhost:5000/hdp3.4-hive:latest'
     hostname: hadoop-master
     ports:
       - '${HIVE_PROXY_PORT}:1180'
@@ -25,25 +24,25 @@ services:
       - '50070:50070'
       - '50075:50075'
     volumes:
-       - ../../../src/main/resources/avro:/docker/volumes/presto-product-tests/avro
+      - ../../../src/main/resources/avro:/docker/volumes/presto-product-tests/avro
 
   presto-master:
     extends:
-      service: java-8-base
+      service: java-base
     hostname: presto-master
     command: /docker/volumes/conf/docker/files/presto-launcher-wrapper.sh singlenode run
     ports:
       - '8080:8080'
       - '5005:5005'
     depends_on:
-       - hadoop-master
+      - hadoop-master
     volumes:
-       - ${PRESTO_SERVER_DIR}:/docker/volumes/presto-server
-       - ../../../src/main/resources/avro:/docker/volumes/presto-product-tests/avro
+      - ${PRESTO_SERVER_DIR}:/docker/volumes/presto-server
+      - ../../../src/main/resources/avro:/docker/volumes/presto-product-tests/avro
 
   application-runner:
     extends:
-      service: java-8-base
+      service: java-base
     hostname: application-runner
     command: bash -c 'echo please provide command to application-runner >&2; exit 1'
     volumes:

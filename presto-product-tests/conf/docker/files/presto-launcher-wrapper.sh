@@ -16,6 +16,7 @@ fi
 
 /docker/volumes/presto-server/bin/launcher \
   -Dnode.id="${HOSTNAME}" \
+  -Djdk.attach.allowAttachSelf=true \
   --etc-dir="${PRESTO_CONFIG_DIRECTORY}" \
   --config="${PRESTO_CONFIG_DIRECTORY}/${CONFIG}".properties \
   --data-dir=/var/presto \
